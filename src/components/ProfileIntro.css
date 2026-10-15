@@ -1,0 +1,40 @@
+.profile-intro { background: #1C1C19; border-bottom: 1px solid var(--line); }
+.profile-layout { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(40px, 7vw, 110px); align-items: center; padding-top: 16px; }
+.profile-photo { position: relative; margin: 0; aspect-ratio: 3 / 4; overflow: hidden; background: #24231f; }
+.profile-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.profile-photo::after { content: ''; position: absolute; inset: 65% 0 0; background: linear-gradient(transparent, #171715c9); pointer-events: none; }
+.profile-photo figcaption { position: absolute; z-index: 1; left: 26px; right: 26px; bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.profile-photo figcaption > span:first-child { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(32px, 3.6vw, 56px); font-weight: 700; letter-spacing: -.025em; }
+.profile-photo figcaption > span:last-child { font-size: 28px; }
+.profile-photo-caption { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 18px; font-size: 12px; color: #bdb9ac; }
+.profile-photo-caption > span:last-child { font-size: 23px; line-height: 1; color: var(--paper); }
+.profile-copy .profile-eyebrow { font-size: 12px; line-height: 1.7; letter-spacing: .035em; margin: 0 0 25px; color: #bdb9ac; }
+.profile-copy .display-title { font-size: clamp(54px, 6.3vw, 106px); }
+.profile-copy > p { max-width: 490px; font-size: 15px; line-height: 1.85; color: #bdb9ac; margin: 20px 0; }
+.profile-copy > .profile-lead { color: var(--paper); font-size: 19px; line-height: 1.65; margin-top: 28px; }
+.profile-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 29px 0; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.profile-facts dt { font-size: 12px; color: #bdb9ac; margin-bottom: 10px; }
+.profile-facts dd { font-size: 13px; line-height: 1.7; margin: 0; }
+.profile-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 22px 30px; }
+.profile-cv { display: inline-flex; align-items: center; gap: 36px; border-radius: 999px; font-size: 14px; }
+.profile-cv > span { font-size: 21px; line-height: 1; }
+.profile-cv:disabled { opacity: .7; }
+.profile-actions .text-link { font-size: 14px; gap: 24px; }
+.profile-copy > .profile-cv-note { margin: 12px 0 0; font-size: 12px; line-height: 1.7; color: #bdb9ac; }
+@media (max-width: 1000px) and (min-width: 768px) {
+  .profile-layout { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 32px; align-items: start; }
+  .profile-copy .display-title { font-size: 5.9vw; }
+  .profile-copy > p { font-size: 14px; }
+  .profile-copy > .profile-lead { font-size: 17px; }
+  .profile-facts { gap: 14px; }
+}
+@media (max-width: 767px) {
+  .profile-layout { grid-template-columns: 1fr; gap: 35px; padding-top: 0; }
+  .profile-visual { max-width: 430px; width: 100%; margin-inline: auto; }
+  .profile-photo figcaption { left: 22px; right: 22px; bottom: 18px; }
+  .profile-photo figcaption > span:first-child { font-size: 40px; }
+  .profile-copy .display-title { font-size: clamp(49px, 11vw, 80px); }
+  .profile-copy > .profile-lead { font-size: 18px; }
+  .profile-copy > p { max-width: none; }
+  .profile-facts { gap: 20px; }
+}
