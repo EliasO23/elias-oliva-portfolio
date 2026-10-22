@@ -1,5 +1,25 @@
 import { test, expect } from '@playwright/test';
 
+test('el navbar no repite su entrada al perder el foco tras cambiar el idioma', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  const header = page.locator('.hero-header');
+  await expect(header).toHaveCSS('opacity', '1');
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const language of ['en', 'es']) {
+      await page.locator('.language-selector').click();
+      await expect(page.locator('html')).toHaveAttribute('lang', language);
+      await page.locator('.eyebrow').click();
+      const state = await header.evaluate(async element => {
+        await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+        return { opacity: getComputedStyle(element).opacity, running: element.getAnimations().some(animation => animation.playState === 'running') };
+      });
+      expect(state).toEqual({ opacity: '1', running: false });
+    }
+  }
+});
+
 test('hero: entrada sincronizada, cursor y movimiento reducido', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');

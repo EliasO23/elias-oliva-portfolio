@@ -26,7 +26,8 @@
   .hero .hero-footer { animation: hero-soft-enter .8s .85s both; border-top-color: transparent; }
   .hero .hero-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: #e9dfc529; transform-origin: left; animation: hero-rule-enter 1.2s .9s cubic-bezier(.22, 1, .36, 1) both; }
   .hero .selection-link span { display: inline-block; animation: hero-arrow-cue 1.5s 1.8s 3; }
-  .hero .hero-header:focus-within, .hero .intro:focus-within, .hero .hero-footer:focus-within { animation: none; }
+  /* Focus reveals controls immediately; retain that state after blur so entrance never replays. */
+  .hero .hero-header[data-entered], .hero .intro[data-entered], .hero .hero-footer[data-entered] { animation: none; }
 }
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) and (min-width: 768px) {
   .hero .hero-title { translate: calc(var(--hero-x, 0px) * -.35) calc(var(--hero-y, 0px) * -.35); transition: translate .65s cubic-bezier(.22, 1, .36, 1); }

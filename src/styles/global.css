@@ -431,3 +431,29 @@ a.project-github:hover { background: var(--paper); color: var(--ink); }
 .contact-verification { margin-top: 20px; min-height: 65px; }
 .contact-verification p { color: #c4bfaf; font-size: 12px; }
 .contact-verification button { padding: 8px 0; text-decoration: underline; font-size: 12px; }
+
+/* Language controls share the header's pill styling and stay compact on mobile. */
+.language-selector { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-width: 56px; min-height: 54px; padding: 12px 18px; flex-shrink: 0; color: var(--paper); font-size: 13px; }
+.language-flag { display: block; width: 24px; height: 24px; flex-shrink: 0; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 1px #e9dfc533; }
+.language-selector:hover { background: var(--paper); color: var(--ink); }
+.not-found-language { padding-top: 24px; }
+
+/* Allow translated text to fit its actual column without clipping. */
+.section-heading-row > *, .about-grid > *, .process-layout > *, .contact-grid > *, .form-row > * { min-width: 0; }
+.project-badge { max-width: calc(100% - 44px); line-height: 1.5; text-align: left; }
+.project-caption h3, .case-technologies dd { overflow-wrap: anywhere; }
+.status-dot { flex-shrink: 0; }
+.process-trigger { grid-template-columns: 25px minmax(0, 1fr) 25px; padding-right: 8px; }
+.process-trigger > span:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
+.process-toggle { width: 18px; height: 18px; line-height: 18px; text-align: center; justify-self: center; }
+html[lang='en'] .process-layout > h2 { font-size: clamp(54px, 6vw, 96px); }
+html[lang='en'] .expertise-item h3 { font-size: clamp(48px, 5.7vw, 88px); }
+@media (max-width: 767px) {
+  html[lang='en'] .hero-title { font-size: clamp(72px, 22vw, 165px); }
+  html[lang='en'] .process-layout > h2 { font-size: clamp(50px, 12vw, 84px); }
+  html[lang='en'] .expertise-item h3 { font-size: clamp(47px, 12vw, 68px); }
+  .project-badge { max-width: calc(100% - 34px); }
+}
+@media (max-width: 380px) {
+  .form-row { grid-template-columns: 1fr; gap: 24px; }
+}

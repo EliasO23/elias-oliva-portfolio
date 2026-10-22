@@ -1,7 +1,9 @@
+import { useLanguage } from '../i18n/Language';
 import { useEffect, useRef, useState } from 'react';
 
 type WidgetOptions = {
   sitekey: string;
+  language: 'es' | 'en';
   action: string;
   theme: 'dark';
   size: 'flexible' | 'compact';
@@ -48,6 +50,7 @@ function loadTurnstile() {
 }
 
 export function Turnstile({ onToken, resetKey }: { onToken: (token: string) => void; resetKey: number }) {
+  const { t, language } = useLanguage();
   const container = useRef<HTMLDivElement>(null);
   const [error, setError] = useState('');
   const [attempt, setAttempt] = useState(0);
@@ -78,7 +81,7 @@ export function Turnstile({ onToken, resetKey }: { onToken: (token: string) => v
     loadTurnstile().then(() => {
       if (!active || !container.current) return;
       widget = window.turnstile!.render(container.current, {
-        sitekey, action: 'contact', theme: 'dark', size: compact ? 'compact' : 'flexible',
+        sitekey, language, action: 'contact', theme: 'dark', size: compact ? 'compact' : 'flexible',
         callback: token => { if (active) { onToken(token); setError(''); } },
         'expired-callback': () => invalidate('La verificación expiró. Vuelve a verificar.'),
         'error-callback': () => invalidate('No se pudo completar la verificación. Intenta de nuevo.'),
@@ -89,10 +92,10 @@ export function Turnstile({ onToken, resetKey }: { onToken: (token: string) => v
       active = false;
       if (widget !== undefined) window.turnstile?.remove(widget);
     };
-  }, [sitekey, resetKey, attempt, onToken, compact]);
+  }, [sitekey, resetKey, attempt, onToken, compact, language]);
 
   return <div className="contact-verification">
     <div ref={container} />
-    {error && <div><p role="status">{error}</p>{sitekey && <button type="button" onClick={() => setAttempt(value => value + 1)}>Reintentar verificación</button>}</div>}
+    {error && <div><p role="status">{t(error)}</p>{sitekey && <button type="button" onClick={() => setAttempt(value => value + 1)}>{t("Reintentar verificación")}</button>}</div>}
   </div>;
 }

@@ -1,5 +1,6 @@
+import { useLanguage } from '../i18n/Language';
 import { useRef, useState, type CSSProperties, type PointerEvent } from 'react';
-import { skillCategories, skills, type SkillCategory } from '../data/skills';
+import { skillCategories, type SkillCategory } from '../data/skills';
 import { Reveal } from './Motion';
 import './Skills.css';
 
@@ -15,6 +16,7 @@ function moveHighlight(event: PointerEvent<HTMLButtonElement>) {
 }
 
 export function Skills() {
+  const { t, skills } = useLanguage();
   const [category, setCategory] = useState<SkillCategory>('desarrollo');
   const [selectedId, setSelectedId] = useState(skills[0].id);
   const detailRef = useRef<HTMLDivElement>(null);
@@ -41,25 +43,25 @@ export function Skills() {
   return (
     <section id="habilidades" className="section-shell skills-section" aria-labelledby="skills-heading">
       <Reveal>
-        <div className="section-kicker"><span>03 / Mis habilidades</span><span>El cómo detrás de cada idea</span></div>
+        <div className="section-kicker"><span>{t("03 / Mis habilidades")}</span><span>{t("El cómo detrás de cada idea")}</span></div>
         <div className="section-heading-row">
-          <h2 id="skills-heading" className="display-title">distintas piezas.<br /><span className="outline">mismo propósito.</span></h2>
-          <p className="section-aside">Un stack para conectar<br />interfaces, sistemas y datos.</p>
+          <h2 id="skills-heading" className="display-title">{t("distintas piezas.")}<br /><span className="outline">{t("mismo propósito.")}</span></h2>
+          <p className="section-aside">{t("Un stack para conectar")}<br />{t("interfaces, sistemas y datos.")}</p>
         </div>
       </Reveal>
 
       <div className="skills-toolbar">
-        <div className="skills-filters" role="group" aria-label="filtrar habilidades por área">
-          {skillCategories.map(item => <button key={item.id} type="button" onClick={() => filter(item.id)} aria-pressed={category === item.id} aria-controls="skills-grid">{item.label}<span>{skills.filter(skill => skill.category === item.id).length}</span></button>)}
+        <div className="skills-filters" role="group" aria-label={t("filtrar habilidades por área")}>
+          {skillCategories.map(item => <button key={item.id} type="button" onClick={() => filter(item.id)} aria-pressed={category === item.id} aria-controls="skills-grid">{t(item.label)}<span>{skills.filter(skill => skill.category === item.id).length}</span></button>)}
         </div>
-        <p className="skills-counter" role="status">{String(shown.length).padStart(2, '0')} / {skills.length} herramientas</p>
+        <p className="skills-counter" role="status">{String(shown.length).padStart(2, '0')} / {skills.length} {t("herramientas")}</p>
       </div>
 
       <Reveal>
         <div className="skills-workbench">
           <div ref={detailRef} id="skill-detail" className="skill-detail" aria-live="polite" aria-atomic="true">
             <div className="skill-detail-content" key={selected.id}>
-              <div className="skill-detail-top"><span>{selectedCategory.label}</span><span aria-hidden="true">↗</span></div>
+              <div className="skill-detail-top"><span>{t(selectedCategory.label)}</span><span aria-hidden="true">↗</span></div>
               <div className="skill-emblem" aria-hidden="true"><div className="skill-orbit" /><div className="skill-orbit skill-orbit-inner" /><Icon path={selected.icon} /></div>
               <h3>{selected.name}<span className="outline">.</span></h3>
               <p className="skill-headline">{selected.headline}</p>
@@ -69,7 +71,7 @@ export function Skills() {
           </div>
 
           <div className="skills-catalog">
-            <div id="skills-grid" className="skills-grid" role="group" aria-label="herramientas disponibles">
+            <div id="skills-grid" className="skills-grid" role="group" aria-label={t("herramientas disponibles")}>
               {shown.map((skill, index) => (
                 <button key={skill.id} type="button" className="skill-tool" aria-pressed={selectedId === skill.id} aria-controls="skill-detail" onClick={() => selectSkill(skill.id)} onPointerMove={moveHighlight} style={{ '--skill-order': index } as CSSProperties}>
                   <span className="skill-tool-index" aria-hidden="true">{String(skills.indexOf(skill) + 1).padStart(2, '0')}</span>
@@ -79,11 +81,11 @@ export function Skills() {
                 </button>
               ))}
             </div>
-            <div className="skills-catalog-footer"><span>elige una herramienta para conocer su enfoque.</span><span aria-hidden="true">↖</span></div>
+            <div className="skills-catalog-footer"><span>{t("elige una herramienta para conocer su enfoque.")}</span><span aria-hidden="true">↖</span></div>
           </div>
         </div>
       </Reveal>
-      <div className="skills-bottom"><span>la herramienta cambia. el criterio permanece.</span><a className="text-link" href="#proyectos">ver las ideas en acción <span aria-hidden="true">↗</span></a></div>
+      <div className="skills-bottom"><span>{t("la herramienta cambia. el criterio permanece.")}</span><a className="text-link" href="#proyectos">{t("ver las ideas en acción")} <span aria-hidden="true">↗</span></a></div>
     </section>
   );
 }

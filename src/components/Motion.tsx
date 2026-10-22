@@ -1,3 +1,4 @@
+import { useLanguage } from '../i18n/Language';
 import { useEffect, useRef, type ReactNode } from 'react';
 
 export function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
@@ -19,6 +20,7 @@ export function Reveal({ children, className = '' }: { children: ReactNode; clas
 }
 
 export function MotionEffects() {
+  const { t } = useLanguage();
   const cursor = useRef<HTMLDivElement>(null);
   const progress = useRef<HTMLDivElement>(null);
   const topLink = useRef<HTMLAnchorElement>(null);
@@ -69,7 +71,7 @@ export function MotionEffects() {
   }, []);
   return <>
     <div ref={progress} className="reading-progress" aria-hidden="true" />
-    <div ref={cursor} className="project-cursor" aria-hidden="true"><span>explorar ↗</span></div>
-    <a ref={topLink} className="back-top" href="#inicio" hidden aria-label="volver al inicio">↑</a>
+    <div ref={cursor} className="project-cursor" aria-hidden="true"><span>{t("explorar ↗")}</span></div>
+    <a ref={topLink} className="back-top" href="#inicio" hidden aria-label={t("volver al inicio")}>↑</a>
   </>;
 }

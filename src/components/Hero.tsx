@@ -1,3 +1,4 @@
+import { LanguageSelector, useLanguage } from '../i18n/Language';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import './Hero.css';
 
@@ -20,13 +21,19 @@ function Destination({ href, children, className = '' }: {
 }
 
 function TitleWords() {
-  return <><span className="word word-code">código</span><span className="word word-with">con</span><span className="word word-purpose">criterio.</span></>;
+  const { t } = useLanguage();
+  return <><span className="word word-code">{t("código")}</span><span className="word word-with">{t("con")}</span><span className="word word-purpose">{t("criterio.")}</span></>;
 }
 
 export function Hero({ name = 'elias oliva', location = 'remoto', portraitSrc,
   portraitAlt = '', backgroundVideoSrc = '', availableForWork = false, links = {},
 }: HeroProps) {
+  const { t } = useLanguage();
   const [motionAllowed, setMotionAllowed] = useState(false);
+  const [revealedAreas, setRevealedAreas] = useState({ header: false, intro: false, footer: false });
+  const revealArea = (area: keyof typeof revealedAreas) => {
+    setRevealedAreas(current => current[area] ? current : { ...current, [area]: true });
+  };
   const stageRef = useRef<HTMLDivElement>(null);
   const [failedPortrait, setFailedPortrait] = useState<string>();
   const [failedVideo, setFailedVideo] = useState<string>();
@@ -71,42 +78,39 @@ export function Hero({ name = 'elias oliva', location = 'remoto', portraitSrc,
   const hasPortrait = Boolean(portraitSrc && failedPortrait !== portraitSrc);
 
   return (
-    <section className={`hero relative isolate w-full overflow-hidden bg-[#171715] text-[#E9DFC5] ${hasPortrait ? 'has-portrait' : ''}`} aria-label="presentación">
+    <section className={`hero relative isolate w-full overflow-hidden bg-[#171715] text-[#E9DFC5] ${hasPortrait ? 'has-portrait' : ''}`} aria-label={t("presentación")}>
       {backgroundVideoSrc && motionAllowed && failedVideo !== backgroundVideoSrc && <>
         <video key={backgroundVideoSrc} className="absolute inset-0 h-full w-full object-cover" src={backgroundVideoSrc} autoPlay loop muted playsInline aria-hidden="true" onError={() => setFailedVideo(backgroundVideoSrc)} />
         <div className="absolute inset-0 bg-[#171715]/80" />
       </>}
 
-      <header className="hero-header relative z-30 flex items-center justify-between gap-4">
-        <Destination className="brand pill flex items-center gap-3" href={links.about}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m8 5-6 7 6 7M16 5l6 7-6 7M14 3l-4 18" stroke="currentColor" strokeWidth="1.5" /></svg>
-          <span>{name}</span>
-        </Destination>
-        <nav aria-label="navegación principal" className="pill center-nav hidden md:flex items-center gap-1">
-          <Destination href={links.projects}>Proyectos</Destination>
-          <Destination href={links.about}>Sobre mí</Destination>
-          <Destination href={links.contact}>Contacto</Destination>
+      <header className="hero-header relative z-30 flex items-center justify-between gap-4" data-entered={revealedAreas.header || undefined} onFocusCapture={() => revealArea('header')}>
+        <LanguageSelector />
+        <nav aria-label={t("navegación principal")} className="pill center-nav hidden md:flex items-center gap-1">
+          <Destination href={links.projects}>{t("Proyectos")}</Destination>
+          <Destination href={links.about}>{t("Sobre mí")}</Destination>
+          <Destination href={links.contact}>{t("Contacto")}</Destination>
         </nav>
-        <Destination className="contact-button inline-flex items-center gap-7 rounded-full" href={links.contact}>Hablemos <span aria-hidden="true">↗</span></Destination>
+        <Destination className="contact-button inline-flex items-center gap-7 rounded-full" href={links.contact}>{t("Hablemos")} <span aria-hidden="true">↗</span></Destination>
       </header>
 
       <div ref={stageRef} className="editorial-stage relative">
-        <div className="eyebrow">Ingeniero en sistemas | Fullstack jr & Datos</div>
-        {availableForWork && <div className="availability flex items-center gap-2.5"><span className="status-dot" />Disponible para proyectos</div>}
-        <h1 className="hero-title"><span className="sr-only">código con criterio.</span><span aria-hidden="true"><TitleWords /></span></h1>
-        <div className="intro">
+        <div className="eyebrow">{t("Ingeniero en sistemas | Fullstack jr & Datos")}</div>
+        {availableForWork && <div className="availability flex items-center gap-2.5"><span className="status-dot" />{t("Disponible para proyectos")}</div>}
+        <h1 className="hero-title"><span className="sr-only">{t("código con criterio.")}</span><span aria-hidden="true"><TitleWords /></span></h1>
+        <div className="intro" data-entered={revealedAreas.intro || undefined} onFocusCapture={() => revealArea('intro')}>
           <span className="intro-marker" aria-hidden="true">↳</span>
-          <p>Construyo experiencias web y encuentro historias en los datos. Cada detalle tiene una razón.</p>
-          <Destination className="project-link inline-flex items-center justify-between gap-6" href={links.projects}>explorar proyectos <span aria-hidden="true">↗</span></Destination>
+          <p>{t("Construyo experiencias web y encuentro historias en los datos. Cada detalle tiene una razón.")}</p>
+          <Destination className="project-link inline-flex items-center justify-between gap-6" href={links.projects}>{t("explorar proyectos")} <span aria-hidden="true">↗</span></Destination>
         </div>
         {hasPortrait && <div className="portrait-layer"><img src={portraitSrc} alt={portraitAlt} onError={() => setFailedPortrait(portraitSrc)} /><div className="portrait-fade" /></div>}
         {hasPortrait && <div className="hero-title title-outline" aria-hidden="true"><TitleWords /></div>}
-        <div className="edition-note" aria-hidden="true">Pensando con intención.<br />Construyendo con precisión.</div>
+        <div className="edition-note" aria-hidden="true">{t("Pensando con intención.")}<br />{t("Construyendo con precisión.")}</div>
       </div>
 
-      <footer className="hero-footer relative z-20 flex flex-wrap items-center justify-between gap-5">
-        <p>Desarrollo de Software & Análisis de Datos <span className="footer-dot">·</span> {location}</p>
-        <Destination className="selection-link inline-flex items-center gap-8" href={links.projects}>selección de proyectos <span aria-hidden="true">↓</span></Destination>
+      <footer className="hero-footer relative z-20 flex flex-wrap items-center justify-between gap-5" data-entered={revealedAreas.footer || undefined} onFocusCapture={() => revealArea('footer')}>
+        <p>{t("Desarrollo de Software & Análisis de Datos")} <span className="footer-dot">·</span> {t(location)}</p>
+        <Destination className="selection-link inline-flex items-center gap-8" href={links.projects}>{t("selección de proyectos")} <span aria-hidden="true">↓</span></Destination>
       </footer>
     </section>
   );
